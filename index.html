@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDT crypto broker</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0a0a0a;
+            color: #00ff00;
+            font-family: "Courier New", Courier, monospace;
+        }
+        .form-container, .config-container {
+            text-align: center;
+            background: #0a0a0a;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,255,0,0.2);
+            border: 1px solid #00ff00;
+        }
+        .confirmation-config-container, .notification-mode-container {
+            text-align: center;
+            background: #0a0a0a;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,255,0,0.2);
+            border: 1px solid #00ff00;
+            display: none;
+        }
+        select, input[type="number"], button {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #00ff00;
+            background-color: #0a0a0a;
+            color: #00ff00;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            font-size: 14px;
+            background-color: #00ff00;
+            color: #0a0a0a;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #00cc00;
+        }
+        .toggle-button {
+            background-color: #00ff00;
+            border-color: #00ff00;
+        }
+        .toggle-button:hover {
+            background-color: #00cc00;
+        }
+    </style>
+</head>
+<body>
+    <div class="config-container">
+        <h1>Settings</h1>
+        <button class="toggle-button" onclick="toggleNotificationModeContainer()">Notifications</button>
+        <div class="notification-mode-container">
+            <button onclick="sendCommand('/trade')">Confirmed Only</button>
+            <button onclick="sendCommand('/spam')">Spam</button>
+        </div>
+        <button class="toggle-button" onclick="toggleConfirmationConfigContainer()">Processing</button>
+        <div class="confirmation-config-container">
+            <select id="confirmationType">
+                <option value="/any">BoS & MSS</option>
+                <option value="/bos">BoS Only</option>
+                <option value="/mss">MSS Only</option>
+            </select>
+            <button onclick="sendCommand(document.getElementById('confirmationType').value)">Set Confirmation Type</button>
+            <div>
+                <input type="number" id="pastInterval" placeholder="Past Interval Shift...">
+                <button onclick="sendCommand('/set_confirmation_past_interval_shift ' + document.getElementById('pastInterval').value)">Set Past Interval Shift</button>
+            </div>
+            <div>
+                <input type="number" id="futureInterval" placeholder="Future Interval Shift...">
+                <button onclick="sendCommand('/set_confirmation_future_interval_shift ' + document.getElementById('futureInterval').value)">Set Future Interval Shift</button>
+            </div>
+        </div>
+        <button onclick="sendCommand('/config')">Get Configuration</button>
+    </div>
+
+    <script>
+        Telegram.WebApp.ready();
+
+        function toggleConfirmationConfigContainer() {
+            var confirmationConfigContainer = document.querySelector('.confirmation-config-container');
+            if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
+                confirmationConfigContainer.style.display = 'block';
+            } else {
+                confirmationConfigContainer.style.display = 'none';
+            }
+        }
+
+        function toggleNotificationModeContainer() {
+            var confirmationConfigContainer = document.querySelector('.notification-mode-container');
+            if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
+                confirmationConfigContainer.style.display = 'block';
+            } else {
+                confirmationConfigContainer.style.display = 'none';
+            }
+        }
+
+        function sendCommand(command) {
+            Telegram.WebApp.sendData(command);
+        }
+    </script>
+</body>
+</html>
