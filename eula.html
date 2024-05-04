@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>License Agreement</title>
+    <title>License Agreement for TradingEvent</title>
     <!-- Linking Cayman theme CSS -->
     <link rel="stylesheet" href="https://pages-themes.github.io/cayman/assets/css/style.css?v=50fb769dac5f3d753e27171adcc73bfaae895e59">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         /* Additional styling to adjust button appearance to better fit Cayman theme */
         button {
@@ -29,15 +28,15 @@
 </head>
 <body>
     <header class="page-header" role="banner">
-        <h1 class="project-name" id="headerTitle">End User License Agreement</h1>
+        <h1 class="project-name">End User License Agreement for TradingEvent</h1>
         <h2 class="project-tagline">Please read this End User License Agreement carefully before using our channel.</h2>
     </header>
 
     <main class="main-content">
-        <p id="welcomeText">Welcome! Please read this End User License Agreement (hereinafter referred to as the "Agreement") carefully before using our channel. By subscribing to our channel or using our information, you agree to be bound by the terms of this Agreement.</p>
+        <p>Welcome to TradingEvent! Please read this End User License Agreement (hereinafter referred to as the "Agreement") carefully before using our channel. By subscribing to our channel or using our information, you agree to be bound by the terms of this Agreement.</p>
 
         <h2>1. Introduction</h2>
-        <p>Welcome! This agreement outlines the terms and conditions of your subscription and use of our channel.</p>
+        <p>Welcome to TradingEvent! This agreement outlines the terms and conditions of your subscription and use of our channel.</p>
 
         <h2>2. Grant of License</h2>
         <p>The channel administration grants you a non-exclusive, non-transferable right to use the information provided within the channel exclusively for personal and non-commercial purposes as described in this Agreement.</p>
@@ -59,20 +58,10 @@
         <p>The channel administration provides the information "as is" without any warranties.</p>
 
         <h2>8. Jurisdiction</h2>
-        <p>Any disputes related to this Agreement will be governed by the laws of [your jurisdiction].</p>
+        <p>Any disputes related to this Agreement will be subject to the laws and jurisdiction as determined by the channel administration at the time of dispute resolution, which shall be in a jurisdiction where the channel administration operates or holds assets.</p>
 
         <h2>Effective Date</h2>
-        <p>[date]</p>
-
-        <button onclick="Telegram.WebApp.close()">Close</button>
+        <p>This Agreement becomes effective as of the date of your acceptance of these terms, or upon your first use of the channel, whichever occurs first.</p>        
     </main>
-
-    <script>
-        Telegram.WebApp.ready();
-        const initData = Telegram.WebApp.initData;  // Contains data passed from Telegram
-        
-        document.getElementById('headerTitle').textContent = 'End User License Agreement for ' + initData.chat.title;
-        document.getElementById('welcomeText').textContent = 'Welcome to ' + initData.chat.title + '! Please read this End User License Agreement carefully before using our channel. By subscribing to our channel or using our information, you agree to be bound by the terms of this Agreement.';
-    </script>
 </body>
 </html>
