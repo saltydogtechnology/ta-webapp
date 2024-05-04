@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License Agreement</title>
+    <!-- Linking Cayman theme CSS -->
+    <link rel="stylesheet" href="https://pages-themes.github.io/cayman/assets/css/style.css?v=50fb769dac5f3d753e27171adcc73bfaae895e59">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* Additional styling to adjust button appearance to better fit Cayman theme */
+        button {
+            background-color: #008cba;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #005f75;
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header" role="banner">
+        <h1 class="project-name" id="headerTitle">End User License Agreement</h1>
+        <h2 class="project-tagline">Please read this End User License Agreement carefully before using our channel.</h2>
+    </header>
+
+    <main class="main-content">
+        <p id="welcomeText">Welcome! Please read this End User License Agreement (hereinafter referred to as the "Agreement") carefully before using our channel. By subscribing to our channel or using our information, you agree to be bound by the terms of this Agreement.</p>
+
+        <h2>1. Introduction</h2>
+        <p>Welcome! This agreement outlines the terms and conditions of your subscription and use of our channel.</p>
+
+        <h2>2. Grant of License</h2>
+        <p>The channel administration grants you a non-exclusive, non-transferable right to use the information provided within the channel exclusively for personal and non-commercial purposes as described in this Agreement.</p>
+
+        <h2>3. Definitions of Commercial and Non-commercial Use</h2>
+        <p><strong>Non-commercial Use:</strong> You may use the information for personal investment purposes, including entering trades on an exchange, without the intent of profiting through the resale of the information, providing paid consulting services, or any other commercial activity.</p>
+        <p><strong>Commercial Use (prohibited):</strong> Includes any use of the information for financial gain, including reselling the information, providing paid consultations, or using the information as part of commercial operations.</p>
+
+        <h2>4. Restrictions</h2>
+        <p>You agree not to share the information with third parties, publish it elsewhere, or use it to create derivative products that may be subject to commercial activities.</p>
+
+        <h2>5. Intellectual Property</h2>
+        <p>All rights to the texts, images, graphics, and other content published in the channel belong to the channel administration.</p>
+
+        <h2>6. Termination of Agreement</h2>
+        <p>The channel administration reserves the right to suspend or cancel your access to the information without prior notice if you violate the terms of this Agreement.</p>
+
+        <h2>7. Disclaimer of Warranties</h2>
+        <p>The channel administration provides the information "as is" without any warranties.</p>
+
+        <h2>8. Jurisdiction</h2>
+        <p>Any disputes related to this Agreement will be governed by the laws of [your jurisdiction].</p>
+
+        <h2>Effective Date</h2>
+        <p>[date]</p>
+
+        <button onclick="Telegram.WebApp.close()">Close</button>
+    </main>
+
+    <script>
+        Telegram.WebApp.ready();
+        const initData = Telegram.WebApp.initData;  // Contains data passed from Telegram
+        
+        document.getElementById('headerTitle').textContent = 'End User License Agreement for ' + initData.chat.title;
+        document.getElementById('welcomeText').textContent = 'Welcome to ' + initData.chat.title + '! Please read this End User License Agreement carefully before using our channel. By subscribing to our channel or using our information, you agree to be bound by the terms of this Agreement.';
+    </script>
+</body>
+</html>
