@@ -26,7 +26,7 @@
             box-shadow: 0 0 10px rgba(0,255,0,0.2);
             border: 1px solid #00ff00;
         }
-        .confirmation-config-container, .notification-mode-container, .analysis-modes-container {
+        .confirmation-config-container, .notification-mode-container, .analysis-modes-container, .bullet-events-config-container {
             text-align: center;
             background: #0a0a0a;
             padding: 20px;
@@ -78,7 +78,7 @@
             <button onclick="sendCommand('/enable_analysis_chart_per_message')">Each message</button>
             <button onclick="sendCommand('/disable_analysis_chart_per_message')">Disabled</button>
         </div>
-        <button class="toggle-button" onclick="toggleConfirmationConfigContainer()">Processing</button>
+        <button class="toggle-button" onclick="toggleConfirmationConfigContainer()">Confirmations</button>
         <div class="confirmation-config-container">
             <select id="confirmationType">
                 <option value="/any">BoS & MSS</option>
@@ -96,6 +96,24 @@
                 <button onclick="sendCommand('/set_confirmation_future_interval_shift ' + document.getElementById('futureInterval').value)">Set Future Interval Shift</button>
             </div>
         </div>
+
+        <button class="toggle-button" onclick="toggleBulletEventsConfigContainer()">BulletEvents</button>
+        <div class="bullet-events-config-container">
+            <select id="bulletEventsState">
+                <option value="/enable_bullet_events">Enabled</option>
+                <option value="/disable_bullet_events">Disabled</option>
+            </select>
+            <button onclick="sendCommand(document.getElementById('bulletEventsState').value)">Set BulletEvents state</button>
+            <div>
+                <input type="number" id="bulletEventsDaysRange" placeholder="BulletEvents Days Range...">
+                <button onclick="sendCommand('/bullet_events_days_range ' + document.getElementById('bulletEventsDaysRange').value)">Set BulletEvents Days Range</button>
+            </div>
+            <div>
+                <button onclick="sendCommand('/bullet_events_last_reset_timestamp')">Update BulletEvents Reset Timestamp to Current</button>
+            </div>
+        </div>
+
+
         <button onclick="sendCommand('/config')">Get Configuration</button>
         <button onclick="sendCommand('/statistics')">Get Statistics</button>
     </div>
@@ -123,6 +141,15 @@
 
         function toggleAnalysisModesContainer() {
             var confirmationConfigContainer = document.querySelector('.analysis-modes-container');
+            if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
+                confirmationConfigContainer.style.display = 'block';
+            } else {
+                confirmationConfigContainer.style.display = 'none';
+            }
+        }
+
+        function toggleBulletEventsConfigContainer() {
+            var confirmationConfigContainer = document.querySelector('.bullet-events-config-container');
             if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
                 confirmationConfigContainer.style.display = 'block';
             } else {
