@@ -26,7 +26,7 @@
             box-shadow: 0 0 10px rgba(0,255,0,0.2);
             border: 1px solid #00ff00;
         }
-        .confirmation-config-container, .notification-mode-container {
+        .confirmation-config-container, .notification-mode-container, .analysis-modes-container {
             text-align: center;
             background: #0a0a0a;
             padding: 20px;
@@ -73,6 +73,11 @@
             <button onclick="sendCommand('/trade')">Confirmed Only</button>
             <button onclick="sendCommand('/spam')">Spam</button>
         </div>
+        <button class="toggle-button" onclick="toggleAnalysisModesContainer()">Analysis Chart</button>
+        <div class="analysis-modes-container">
+            <button onclick="sendCommand('/enable_analysis_chart_per_message')">Each message</button>
+            <button onclick="sendCommand('/disable_analysis_chart_per_message')">Disabled</button>
+        </div>
         <button class="toggle-button" onclick="toggleConfirmationConfigContainer()">Processing</button>
         <div class="confirmation-config-container">
             <select id="confirmationType">
@@ -109,6 +114,15 @@
 
         function toggleNotificationModeContainer() {
             var confirmationConfigContainer = document.querySelector('.notification-mode-container');
+            if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
+                confirmationConfigContainer.style.display = 'block';
+            } else {
+                confirmationConfigContainer.style.display = 'none';
+            }
+        }
+
+        function toggleAnalysisModesContainer() {
+            var confirmationConfigContainer = document.querySelector('.analysis-modes-container');
             if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
                 confirmationConfigContainer.style.display = 'block';
             } else {
