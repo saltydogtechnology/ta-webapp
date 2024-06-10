@@ -103,13 +103,17 @@
                 <option value="/enable_bullet_events">Enabled</option>
                 <option value="/disable_bullet_events">Disabled</option>
             </select>
-            <button onclick="sendCommand(document.getElementById('bulletEventsState').value)">Set BulletEvents state</button>
+            <button onclick="sendCommand(document.getElementById('bulletEventsState').value)">Enable/Disable BulletEvents</button>
             <div>
-                <input type="number" id="bulletEventsDaysRange" placeholder="BulletEvents Days Range...">
-                <button onclick="sendCommand('/bullet_events_days_range ' + document.getElementById('bulletEventsDaysRange').value)">Set BulletEvents Days Range</button>
+                <input type="number" id="bulletEventsDaysRange" placeholder="Days Range...">
+                <button onclick="sendCommand('/bullet_events_days_range ' + document.getElementById('bulletEventsDaysRange').value)">Set Days Range</button>
             </div>
             <div>
-                <button onclick="sendCommand('/bullet_events_last_reset_timestamp')">Update BulletEvents Reset Timestamp to Current</button>
+                <input type="number" id="bulletEventsMinEvents2Group" placeholder="Min Events to Group...">
+                <button onclick="sendCommand('/bullet_events_min_events_to_group ' + document.getElementById('bulletEventsMinEvents2Group').value)">Set Min Events to Group</button>
+            </div>
+            <div>
+                <button onclick="sendCommand('/bullet_events_last_reset_timestamp')">Set Reset Timestamp to Current</button>
             </div>
         </div>
 
