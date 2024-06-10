@@ -26,7 +26,7 @@
             box-shadow: 0 0 10px rgba(0,255,0,0.2);
             border: 1px solid #00ff00;
         }
-        .confirmation-config-container, .notification-mode-container, .analysis-modes-container, .bullet-events-config-container {
+        .confirmation-config-container, .notification-mode-container, .analysis-modes-container, .bullet-events-config-container, .batch-analysis-config-container {
             text-align: center;
             background: #0a0a0a;
             padding: 20px;
@@ -117,6 +117,14 @@
             </div>
         </div>
 
+        <!-- batch_analysis_n_days -->
+        <button class="toggle-button" onclick="toggleBatchAnalysisConfigContainer()">Batch Analysis</button>
+        <div class="batch-analysis-config-container">
+            <div>
+                <input type="number" id="BatchAnalysisDaysRange" placeholder="Days...">
+                <button onclick="sendCommand('/batch_analysis_n_days ' + document.getElementById('BatchAnalysisDaysRange').value)">Set Days</button>
+            </div>
+        </div>
 
         <button onclick="sendCommand('/config')">Get Configuration</button>
         <button onclick="sendCommand('/statistics')">Get Statistics</button>
@@ -154,6 +162,15 @@
 
         function toggleBulletEventsConfigContainer() {
             var confirmationConfigContainer = document.querySelector('.bullet-events-config-container');
+            if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
+                confirmationConfigContainer.style.display = 'block';
+            } else {
+                confirmationConfigContainer.style.display = 'none';
+            }
+        }
+
+        function toggleBatchAnalysisConfigContainer() {
+            var confirmationConfigContainer = document.querySelector('.batch-analysis-config-container');
             if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
                 confirmationConfigContainer.style.display = 'block';
             } else {
