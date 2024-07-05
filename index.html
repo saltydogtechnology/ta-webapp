@@ -26,7 +26,7 @@
             box-shadow: 0 0 10px rgba(0,255,0,0.2);
             border: 1px solid #00ff00;
         }
-        .confirmation-config-container, .notification-mode-container, .analysis-modes-container, .bullet-events-config-container, .batch-analysis-config-container {
+        .confirmation-config-container, .notification-mode-container, .analysis-modes-container, .bullet-events-config-container, .batch-analysis-config-container, .verification-config-container {
             text-align: center;
             background: #0a0a0a;
             padding: 20px;
@@ -97,6 +97,15 @@
             </div>
         </div>
 
+        <button class="toggle-button" onclick="toggleVerificationConfigContainer()">Verifications</button>
+        <div class="verification-config-container">
+            <select id="verificationType">
+                <option value="/adx">ADX</option>
+                <option value="/disabled">Disabled</option>
+            </select>
+            <button onclick="sendCommand(document.getElementById('verificationType').value)">Set Verification Type</button>
+        </div>
+
         <button class="toggle-button" onclick="toggleBulletEventsConfigContainer()">BulletEvents</button>
         <div class="bullet-events-config-container">
             <select id="bulletEventsState">
@@ -139,6 +148,15 @@
                 confirmationConfigContainer.style.display = 'block';
             } else {
                 confirmationConfigContainer.style.display = 'none';
+            }
+        }
+
+        function toggleVerificationConfigContainer() {
+            var verificationConfigContainer = document.querySelector('.verification-config-container');
+            if (verificationConfigContainer.style.display === 'none' || verificationConfigContainer.style.display === '') {
+                verificationConfigContainer.style.display = 'block';
+            } else {
+                verificationConfigContainer.style.display = 'none';
             }
         }
 
