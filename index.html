@@ -101,10 +101,14 @@
         <div class="verification-config-container">
             <select id="verificationType">
                 <option value="/adx">ADX</option>
+            </select>
+            <button onclick="sendCommand(document.getElementById('verificationType').value)">Set Verification Type</button>
+            <select id="verificationMode">
+                <option value="/verification-enabled">Enabled</option>
                 <option value="/verification-disabled">Disabled</option>
                 <option value="/verification-check-only">Check Only</option>
             </select>
-            <button onclick="sendCommand(document.getElementById('verificationType').value)">Set Verification Type</button>
+            <button onclick="sendCommand(document.getElementById('verificationMode').value)">Set Verification Mode</button>
         </div>
 
         <button class="toggle-button" onclick="toggleBulletEventsConfigContainer()">BulletEvents</button>
