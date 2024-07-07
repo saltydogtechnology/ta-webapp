@@ -63,6 +63,14 @@
         .toggle-button:hover {
             background-color: #00cc00;
         }
+        .danger-button {
+            background-color: #ff0000;
+            color: #ffffff;
+            border: none;
+        }
+        .danger-button:hover {
+            background-color: #cc0000;
+        }
     </style>
 </head>
 <body>
@@ -131,7 +139,6 @@
             </div>
         </div>
 
-        <!-- batch_analysis_n_days -->
         <button class="toggle-button" onclick="toggleBatchAnalysisConfigContainer()">Batch Analysis</button>
         <div class="batch-analysis-config-container">
             <div>
@@ -142,6 +149,7 @@
 
         <button onclick="sendCommand('/config')">Get Configuration</button>
         <button onclick="sendCommand('/statistics')">Get Events Statistics</button>
+        <button class="danger-button" onclick="sendCommand('/drop-all-events')">DROP ALL EVENTS</button>
     </div>
 
     <script>
