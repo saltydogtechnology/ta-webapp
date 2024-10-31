@@ -36,6 +36,35 @@
             border: 1px solid #00ff00;
             display: none;
         }
+        .query-container {
+            text-align: center;
+            background: #0a0a0a;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(147,112,219,0.4);
+            border: 1px solid #9370db;
+        }
+        .query-container h1 {
+            color: #9370db;
+        }
+        .query-container input {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #9370db;
+            background-color: #0a0a0a;
+            color: #9370db;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .query-container button {
+            background-color: #9370db;
+            color: #0a0a0a;
+        }
+        .query-container button:hover {
+            background-color: #8a2be2;
+        }
         select, input[type="number"], button {
             width: 80%;
             padding: 10px;
@@ -74,6 +103,12 @@
     </style>
 </head>
 <body>
+    <div class="query-container">
+        <h1>Make Query</h1>
+        <input type="text" id="tradingPair" placeholder="Enter trading pair (e.g., BTCUSDT)">
+        <button onclick="sendCommand('/get_sr_levels ' + document.getElementById('tradingPair').value)">Get S/R Levels</button>
+    </div>
+
     <div class="config-container">
         <h1>Settings</h1>
         <button class="toggle-button" onclick="toggleNotificationModeContainer()">Notifications</button>
