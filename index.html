@@ -3,267 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuration Web App</title>
+    <title>TradingEvent Query</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #0a0a0a;
-            color: #00ff00;
-            font-family: "Courier New", Courier, monospace;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.5;
+            background-color: #111827;
+            min-height: 100vh;
+            color: #f3f4f6;
+            -webkit-overflow-scrolling: touch;
         }
-        .form-container, .config-container {
-            text-align: center;
-            background: #0a0a0a;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,255,0,0.2);
-            border: 1px solid #00ff00;
+
+        .bg-grid {
+            background-image: 
+                linear-gradient(to right, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.05;
         }
-        .confirmation-config-container, .notification-mode-container, .analysis-modes-container, .bullet-events-config-container, .batch-analysis-config-container, .verification-config-container, .cleanup-events-config-container {
-            text-align: center;
-            background: #0a0a0a;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,255,0,0.2);
-            border: 1px solid #00ff00;
-            display: none;
+
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
+            filter: blur(40px);
+            pointer-events: none;
         }
-        .query-container {
-            text-align: center;
-            background: #0a0a0a;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(147,112,219,0.4);
-            border: 1px solid #9370db;
+
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
         }
-        .query-container h1 {
-            color: #9370db;
+
+        input {
+            color: #f3f4f6 !important;
+            background-color: rgba(17, 24, 39, 0.8) !important;
+            text-transform: uppercase !important;
         }
-        .query-container input {
-            width: 80%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #9370db;
-            background-color: #0a0a0a;
-            color: #9370db;
-            border-radius: 4px;
-            box-sizing: border-box;
+
+        input::placeholder {
+            color: #6b7280 !important;
+            text-transform: none !important;
         }
-        .query-container button {
-            background-color: #9370db;
-            color: #0a0a0a;
+
+        input:focus {
+            outline: none;
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
-        .query-container button:hover {
-            background-color: #8a2be2;
-        }
-        select, input[type="number"], button {
-            width: 80%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #00ff00;
-            background-color: #0a0a0a;
-            color: #00ff00;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            font-size: 14px;
-            background-color: #00ff00;
-            color: #0a0a0a;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #00cc00;
-        }
-        .toggle-button {
-            background-color: #00ff00;
-            border-color: #00ff00;
-        }
-        .toggle-button:hover {
-            background-color: #00cc00;
-        }
-        .danger-button {
-            background-color: #ff0000;
-            color: #ffffff;
-            border: none;
-        }
-        .danger-button:hover {
-            background-color: #cc0000;
+
+        @supports not (backdrop-filter: blur(12px)) {
+            .bg-gray-900\/80 {
+                background-color: #111827;
+            }
         }
     </style>
 </head>
-<body>
-    <div class="query-container">
-        <h1>Make Query</h1>
-        <input type="text" id="tradingPair" placeholder="Enter trading pair (e.g., BTCUSDT)">
-        <button onclick="sendCommand('/get_sr_levels ' + document.getElementById('tradingPair').value)">Get S/R Levels</button>
-    </div>
+<body class="relative overflow-x-hidden">
+    <!-- Background Elements -->
+    <div class="fixed inset-0 bg-grid"></div>
+    <div class="bg-glow fixed top-0 left-1/3 -translate-x-1/2"></div>
+    <div class="bg-glow fixed bottom-0 right-1/3 translate-x-1/2"></div>
 
-    <div class="config-container">
-        <h1>Settings</h1>
-        <button class="toggle-button" onclick="toggleNotificationModeContainer()">Notifications</button>
-        <div class="notification-mode-container">
-            <button onclick="sendCommand('/trade')">Confirmed Only</button>
-            <button onclick="sendCommand('/spam')">Spam</button>
-        </div>
-        <button class="toggle-button" onclick="toggleAnalysisModesContainer()">Analysis Chart</button>
-        <div class="analysis-modes-container">
-            <button onclick="sendCommand('/enable_analysis_chart_per_message')">Each message</button>
-            <button onclick="sendCommand('/disable_analysis_chart_per_message')">Disabled</button>
-        </div>
-        <button class="toggle-button" onclick="toggleConfirmationConfigContainer()">Confirmations</button>
-        <div class="confirmation-config-container">
-            <select id="confirmationType">
-                <option value="/any">BoS & MSS</option>
-                <option value="/disabled">Disabled</option>
-                <option value="/bos">BoS Only</option>
-                <option value="/mss">MSS Only</option>
-            </select>
-            <button onclick="sendCommand(document.getElementById('confirmationType').value)">Set Confirmation Type</button>
-            <div>
-                <input type="number" id="pastInterval" placeholder="Past Interval Shift...">
-                <button onclick="sendCommand('/set_confirmation_past_interval_shift ' + document.getElementById('pastInterval').value)">Set Past Interval Shift</button>
+    <!-- Main Content -->
+    <div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="w-full max-w-md">
+            <!-- Logo -->
+            <div class="flex items-center justify-center mb-8">
+                <svg class="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                <span class="ml-3 text-2xl font-bold gradient-text">TradingEvent</span>
             </div>
-            <div>
-                <input type="number" id="futureInterval" placeholder="Future Interval Shift...">
-                <button onclick="sendCommand('/set_confirmation_future_interval_shift ' + document.getElementById('futureInterval').value)">Set Future Interval Shift</button>
-            </div>
-        </div>
 
-        <button class="toggle-button" onclick="toggleVerificationConfigContainer()">Verifications</button>
-        <div class="verification-config-container">
-            <select id="verificationType">
-                <option value="/adx">ADX</option>
-            </select>
-            <button onclick="sendCommand(document.getElementById('verificationType').value)">Set Verification Type</button>
-            <select id="verificationMode">
-                <option value="/verification-enabled">Enabled</option>
-                <option value="/verification-disabled">Disabled</option>
-                <option value="/verification-check-only">Check Only</option>
-            </select>
-            <button onclick="sendCommand(document.getElementById('verificationMode').value)">Set Verification Mode</button>
-        </div>
+            <!-- Query Container -->
+            <div class="relative">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg opacity-20 blur"></div>
+                <div class="relative bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-8">
+                    <h2 class="text-xl font-semibold text-white mb-6">Support/Resistance Query</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label for="tradingPair" class="block text-sm font-medium text-gray-400 mb-2">Trading Pair</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                    </svg>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    id="tradingPair" 
+                                    placeholder="Enter trading pair (e.g., BTCUSDT)" 
+                                    class="block w-full pl-10 pr-4 py-3 border border-gray-700 rounded-lg text-white placeholder-gray-500"
+                                    oninput="this.value = this.value.toUpperCase()"
+                                >
+                            </div>
+                        </div>
 
-        <button class="toggle-button" onclick="toggleBulletEventsConfigContainer()">BulletEvents</button>
-        <div class="bullet-events-config-container">
-            <select id="bulletEventsState">
-                <option value="/enable_bullet_events">Enabled</option>
-                <option value="/disable_bullet_events">Disabled</option>
-            </select>
-            <button onclick="sendCommand(document.getElementById('bulletEventsState').value)">Enable/Disable BulletEvents</button>
-            <div>
-                <input type="number" id="bulletEventsDaysRange" placeholder="Days Range...">
-                <button onclick="sendCommand('/bullet_events_days_range ' + document.getElementById('bulletEventsDaysRange').value)">Set Days Range</button>
+                        <button 
+                            onclick="sendCommand('/get_sr_levels ' + document.getElementById('tradingPair').value.toUpperCase())"
+                            class="w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-lg text-sm font-medium text-black bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                        >
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            Get S/R Levels
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div>
-                <input type="number" id="bulletEventsMinEvents2Group" placeholder="Min Events to Group...">
-                <button onclick="sendCommand('/bullet_events_min_events_to_group ' + document.getElementById('bulletEventsMinEvents2Group').value)">Set Min Events to Group</button>
-            </div>
-            <div>
-                <button onclick="sendCommand('/bullet_events_last_reset_timestamp')">Set Reset Timestamp to Current</button>
-            </div>
-        </div>
-
-        <button class="toggle-button" onclick="toggleBatchAnalysisConfigContainer()">Batch Analysis</button>
-        <div class="batch-analysis-config-container">
-            <div>
-                <input type="number" id="BatchAnalysisDaysRange" placeholder="Days...">
-                <button onclick="sendCommand('/batch_analysis_n_days ' + document.getElementById('BatchAnalysisDaysRange').value)">Set Days</button>
-            </div>
-        </div>
-
-        <button onclick="sendCommand('/config')">Get Configuration</button>
-        <button onclick="sendCommand('/statistics')">Get Events Statistics</button>
-
-        <button class="toggle-button" onclick="toggleCleanupEventsConfigContainer()">Cleanup Events</button>
-        <div class="cleanup-events-config-container">
-            <div>
-                <input type="number" id="CleanupEventsDaysThreshold" placeholder="Days...">
-                <button onclick="sendCommand('/cleanup_events_days_threshold ' + document.getElementById('CleanupEventsDaysThreshold').value)">Set Days Threshold</button>
-            </div>
-            <button class="danger-button" onclick="sendCommand('/cleanup-events')">Make Events Cleanup</button>
         </div>
     </div>
 
     <script>
         Telegram.WebApp.ready();
 
-        function toggleConfirmationConfigContainer() {
-            var confirmationConfigContainer = document.querySelector('.confirmation-config-container');
-            if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
-                confirmationConfigContainer.style.display = 'block';
-            } else {
-                confirmationConfigContainer.style.display = 'none';
-            }
-        }
-
-        function toggleVerificationConfigContainer() {
-            var verificationConfigContainer = document.querySelector('.verification-config-container');
-            if (verificationConfigContainer.style.display === 'none' || verificationConfigContainer.style.display === '') {
-                verificationConfigContainer.style.display = 'block';
-            } else {
-                verificationConfigContainer.style.display = 'none';
-            }
-        }
-
-        function toggleNotificationModeContainer() {
-            var confirmationConfigContainer = document.querySelector('.notification-mode-container');
-            if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
-                confirmationConfigContainer.style.display = 'block';
-            } else {
-                confirmationConfigContainer.style.display = 'none';
-            }
-        }
-
-        function toggleAnalysisModesContainer() {
-            var confirmationConfigContainer = document.querySelector('.analysis-modes-container');
-            if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
-                confirmationConfigContainer.style.display = 'block';
-            } else {
-                confirmationConfigContainer.style.display = 'none';
-            }
-        }
-
-        function toggleBulletEventsConfigContainer() {
-            var confirmationConfigContainer = document.querySelector('.bullet-events-config-container');
-            if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
-                confirmationConfigContainer.style.display = 'block';
-            } else {
-                confirmationConfigContainer.style.display = 'none';
-            }
-        }
-
-        function toggleBatchAnalysisConfigContainer() {
-            var confirmationConfigContainer = document.querySelector('.batch-analysis-config-container');
-            if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
-                confirmationConfigContainer.style.display = 'block';
-            } else {
-                confirmationConfigContainer.style.display = 'none';
-            }
-        }
-
-        function toggleCleanupEventsConfigContainer() {
-            var confirmationConfigContainer = document.querySelector('.cleanup-events-config-container');
-            if (confirmationConfigContainer.style.display === 'none' || confirmationConfigContainer.style.display === '') {
-                confirmationConfigContainer.style.display = 'block';
-            } else {
-                confirmationConfigContainer.style.display = 'none';
-            }
-        }
-
         function sendCommand(command) {
             Telegram.WebApp.sendData(command);
         }
+
+        // Fix iOS hover states
+        document.addEventListener('touchstart', function() {}, false);
     </script>
 </body>
 </html>
