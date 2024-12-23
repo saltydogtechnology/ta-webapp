@@ -64,6 +64,93 @@
                 background-color: #111827;
             }
         }
+
+        /* Checkbox styles */
+        .custom-checkbox {
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+            padding-left: 2rem;
+        }
+
+        .custom-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+            text-transform: none !important;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: rgba(17, 24, 39, 0.8);
+            border: 1px solid #4B5563;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .custom-checkbox:hover input ~ .checkmark {
+            border-color: #3B82F6;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark {
+            background-color: #3B82F6;
+            border-color: #3B82F6;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 6px;
+            top: 2px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .custom-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Button hover effect */
+        .hover-effect:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        /* Loading state for button */
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading:after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: loading-spinner 0.6s linear infinite;
+        }
+
+        @keyframes loading-spinner {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 <body class="relative overflow-x-hidden">
@@ -90,6 +177,7 @@
                     <h2 class="text-xl font-semibold text-white mb-6">Support/Resistance Processor Query</h2>
                     
                     <div class="space-y-4">
+                        <!-- Trading Pair Input -->
                         <div>
                             <label for="tradingPair" class="block text-sm font-medium text-gray-400 mb-2">Trading Pair</label>
                             <div class="relative">
@@ -108,9 +196,20 @@
                             </div>
                         </div>
 
+                        <!-- Regenerate Templates Checkbox -->
+                        <div class="pt-2">
+                            <label class="custom-checkbox flex items-center">
+                                <input type="checkbox" id="regenerateTemplates">
+                                <span class="checkmark"></span>
+                                <span class="text-sm text-gray-400 ml-2">Regenerate all templates</span>
+                            </label>
+                        </div>
+
+                        <!-- Generate Button -->
                         <button 
-                            onclick="sendCommand('/get_sr_levels ' + document.getElementById('tradingPair').value.toUpperCase())"
-                            class="w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-lg text-sm font-medium text-black bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                            id="generateButton"
+                            onclick="sendCommand()"
+                            class="w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-lg text-sm font-medium text-black bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 hover-effect"
                         >
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/>
@@ -126,9 +225,46 @@
     <script>
         Telegram.WebApp.ready();
 
-        function sendCommand(command) {
-            Telegram.WebApp.sendData(command);
+        function sendCommand() {
+            const tradingPair = document.getElementById('tradingPair').value.toUpperCase();
+            if (!tradingPair) {
+                // Show error animation or message
+                const input = document.getElementById('tradingPair');
+                input.classList.add('border-red-500');
+                setTimeout(() => {
+                    input.classList.remove('border-red-500');
+                }, 2000);
+                return;
+            }
+
+            const regenerateTemplates = document.getElementById('regenerateTemplates').checked;
+            const button = document.getElementById('generateButton');
+
+            // Add loading state
+            button.classList.add('loading');
+            button.disabled = true;
+
+            const data = {
+                command: '/get_sr_levels',
+                trading_pair: tradingPair,
+                regenerate_templates: regenerateTemplates
+            };
+
+            Telegram.WebApp.sendData(JSON.stringify(data));
+
+            // Remove loading state after a short delay
+            setTimeout(() => {
+                button.classList.remove('loading');
+                button.disabled = false;
+            }, 500);
         }
+
+        // Enter key handler
+        document.getElementById('tradingPair').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendCommand();
+            }
+        });
 
         // Fix iOS hover states
         document.addEventListener('touchstart', function() {}, false);
