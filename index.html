@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TradingEvent Query</title>
+    <title>Trading Deployment</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
@@ -174,7 +174,7 @@
             <div class="relative">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg opacity-20 blur"></div>
                 <div class="relative bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-8">
-                    <h2 class="text-xl font-semibold text-white mb-6">Processor Query</h2>
+                    <h2 class="text-xl font-semibold text-white mb-6">Deployment Configuration</h2>
                     
                     <div class="space-y-4">
                         <!-- Trading Pair Input -->
@@ -196,25 +196,33 @@
                             </div>
                         </div>
 
-                        <!-- Regenerate Templates Checkbox -->
-                        <div class="pt-2">
+                        <!-- Checkboxes Container -->
+                        <div class="space-y-3 pt-2">
+                            <!-- Regenerate Templates Checkbox -->
                             <label class="custom-checkbox flex items-center">
                                 <input type="checkbox" id="regenerateTemplates">
                                 <span class="checkmark"></span>
                                 <span class="text-sm text-gray-400 ml-2">Regenerate all templates</span>
                             </label>
+
+                            <!-- Update OHLCV Data Checkbox -->
+                            <label class="custom-checkbox flex items-center">
+                                <input type="checkbox" id="updateOHLCV">
+                                <span class="checkmark"></span>
+                                <span class="text-sm text-gray-400 ml-2">Update OHLCV data</span>
+                            </label>
                         </div>
 
-                        <!-- Generate Button -->
+                        <!-- Deploy Button -->
                         <button 
-                            id="generateButton"
+                            id="deployButton"
                             onclick="sendCommand()"
                             class="w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-lg text-sm font-medium text-black bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 hover-effect"
                         >
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/>
                             </svg>
-                            Generate
+                            Deploy
                         </button>
                     </div>
                 </div>
@@ -228,7 +236,6 @@
         function sendCommand() {
             const tradingPair = document.getElementById('tradingPair').value.toUpperCase();
             if (!tradingPair) {
-                // Show error animation or message
                 const input = document.getElementById('tradingPair');
                 input.classList.add('border-red-500');
                 setTimeout(() => {
@@ -238,16 +245,18 @@
             }
 
             const regenerateTemplates = document.getElementById('regenerateTemplates').checked;
-            const button = document.getElementById('generateButton');
+            const updateOHLCV = document.getElementById('updateOHLCV').checked;
+            const button = document.getElementById('deployButton');
 
             // Add loading state
             button.classList.add('loading');
             button.disabled = true;
 
             const data = {
-                command: '/get_sr_levels',
+                command: '/initiate-deployment',
                 trading_pair: tradingPair,
-                regenerate_templates: regenerateTemplates
+                regenerate_templates: regenerateTemplates,
+                update_ohlcv: updateOHLCV
             };
 
             Telegram.WebApp.sendData(JSON.stringify(data));
